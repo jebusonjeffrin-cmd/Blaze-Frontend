@@ -163,13 +163,13 @@ const VoiceAnalysis: React.FC = () => {
                 <div className="lg:col-span-2 space-y-6">
 
                     {/* Microphone Capture Box */}
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm overflow-hidden relative">
+                    <div className="border-b border-[var(--color-surface-border)] overflow-hidden relative pb-10 mb-8">
                         <h3 className="font-display font-medium text-lg mb-4">
                             Live Microphone Triage
                         </h3>
 
                         {isRecording ? (
-                            <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-100 rounded-[32px]">
+                            <div className="flex flex-col items-center justify-center p-8 bg-[var(--color-surface-base)] border border-red-300">
                                 <div className="text-red-500 mb-4 animate-pulse">
                                     <Mic size={48} />
                                 </div>
@@ -197,7 +197,7 @@ const VoiceAnalysis: React.FC = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center p-8 bg-[var(--color-surface-accent-bg)] border border-[var(--color-surface-border)] rounded-[32px] hover:bg-[var(--color-surface-border)] transition-colors">
+                            <div className="flex flex-col items-center justify-center p-8 bg-transparent border border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)] transition-colors">
                                 <button
                                     onClick={toggleRecording}
                                     className="w-20 h-20 bg-[var(--color-text-main)] hover:bg-black text-white rounded-full flex items-center justify-center shadow-xl shadow-black/10 transition-all hover:scale-105 mb-4"
@@ -211,20 +211,20 @@ const VoiceAnalysis: React.FC = () => {
                     </div>
 
                     {/* File Upload Box */}
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm">
+                    <div className="pb-8">
                         <h3 className="font-display font-medium text-lg mb-4">
                             Batch File Ingest
                         </h3>
 
                         {uploading ? (
-                            <div className="border-2 border-dashed border-lime-200 bg-lime-50/10 rounded-[32px] p-12 text-center flex flex-col items-center justify-center gap-4">
+                            <div className="border border-dashed border-[var(--color-surface-border)] p-12 text-center flex flex-col items-center justify-center gap-4">
                                 <span className="w-10 h-10 border-4 border-[var(--color-surface-border)] border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
                                 <div>
                                     <p className="text-sm font-semibold text-zinc-700">Connecting Audio Pipeline...</p>
                                 </div>
                             </div>
                         ) : uploadSuccess ? (
-                            <div className="border-2 border-dashed border-green-200 bg-green-50/10 rounded-[32px] p-12 text-center flex flex-col items-center justify-center gap-3">
+                            <div className="border border-[var(--color-surface-border)] p-12 text-center flex flex-col items-center justify-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
                                     <ShieldCheck size={20} />
                                 </div>
@@ -238,9 +238,9 @@ const VoiceAnalysis: React.FC = () => {
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
-                                className={`border-2 border-dashed rounded-[32px] p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
-                                    ? 'border-blue-500 bg-blue-50/30'
-                                    : 'border-[var(--color-surface-border)] hover:border-[var(--color-surface-border)] bg-[var(--color-surface-accent-bg)]'
+                                className={`border border-dashed p-10 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
+                                    ? 'border-[var(--color-accent-violet)] bg-[var(--color-surface-accent-bg)]'
+                                    : 'border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)]'
                                     }`}
                             >
                                 <input
@@ -263,7 +263,7 @@ const VoiceAnalysis: React.FC = () => {
                             </label>
                         )}
 
-                        <div className="mt-4 flex items-start gap-2.5 bg-[var(--color-surface-accent-bg)] border border-[var(--color-surface-border)] rounded-[32px] p-3 text-xs text-[var(--color-text-muted)] leading-normal font-light">
+                        <div className="mt-4 flex items-start gap-2.5 bg-transparent border border-[var(--color-surface-border)] p-4 text-xs text-[var(--color-text-muted)] leading-normal font-light">
                             <AlertTriangle size={15} className="text-[var(--color-text-light)] shrink-0 mt-0.5" />
                             <p>
                                 NHAA Standard: Audio data is processed in-memory. Residual buffer artifacts are immediately scrubbed upon completion of diagnostic mapping.
@@ -274,7 +274,7 @@ const VoiceAnalysis: React.FC = () => {
 
                 {/* RIGHT COLUMN: Recent Presets */}
                 <div className="space-y-6">
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm">
+                    <div className="lg:border-l lg:border-[var(--color-surface-border)] lg:pl-10 h-full">
                         <h3 className="font-display font-medium text-lg mb-1">
                             Load NHAA Architecture Demo
                         </h3>
@@ -286,7 +286,7 @@ const VoiceAnalysis: React.FC = () => {
                             {cases.slice(0, 2).map((item) => (
                                 <div
                                     key={item.case_id}
-                                    className="border border-[var(--color-surface-border)] rounded-[32px] p-4 hover:border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)] transition-all group flex flex-col justify-between"
+                                    className="border border-[var(--color-surface-border)] p-5 hover:bg-[var(--color-surface-accent-bg)] transition-all flex flex-col justify-between"
                                 >
                                     <div>
                                         <div className="flex items-center justify-between">

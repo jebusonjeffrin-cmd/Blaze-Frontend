@@ -86,7 +86,7 @@ const AnalysisDetail: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="max-w-md bg-white border border-[var(--color-surface-border)] p-4 rounded-[32px] shadow-sm hidden md:block">
+                <div className="max-w-md bg-transparent border border-[var(--color-surface-border)] p-5 hidden md:block">
                     <p className="text-[10px] font-bold text-[var(--color-text-light)] uppercase tracking-widest mb-1.5">Executive Brief</p>
                     <p className="text-xs text-zinc-700 leading-relaxed font-medium">
                         {item.admin_executive_brief}
@@ -107,7 +107,7 @@ const AnalysisDetail: React.FC = () => {
                             Action Remits & Recommendations
                         </h3>
                         {item.recommendations.map((rec, idx) => (
-                            <div key={idx} className="bg-white border border-[var(--color-surface-border)] rounded-[32px] p-5 shadow-sm space-y-3">
+                            <div key={idx} className="bg-transparent border border-[var(--color-surface-border)] border-l-4 border-l-[var(--color-surface-dark)] p-5 space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--color-surface-border)] border border-[var(--color-surface-border)] text-lg shadow-sm">
@@ -144,7 +144,7 @@ const AnalysisDetail: React.FC = () => {
                             Algorithmic Substrates
                         </h3>
                         {item.detected_signs.map((sign, idx) => (
-                            <div key={idx} className="p-4 bg-[var(--color-surface-base)] border border-[var(--color-surface-border)] rounded-[32px] flex items-start gap-4">
+                            <div key={idx} className="p-4 bg-transparent border-t border-[var(--color-surface-border)] flex items-start gap-4">
                                 <div className="text-[10px] font-bold text-zinc-700 bg-white border border-[var(--color-surface-border)] uppercase tracking-widest px-2 py-0.5 rounded shadow-sm shrink-0">
                                     {sign.type}
                                 </div>

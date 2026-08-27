@@ -5,8 +5,7 @@ import {
     AlertTriangle,
     ArrowRight,
     TrendingUp,
-    Headphones,
-    Plus
+    Headphones
 } from 'lucide-react';
 import type { NHAAPayload, RiskCategory } from '../types';
 import { analysisService } from '../services/analysisService';
@@ -23,162 +22,145 @@ const Dashboard: React.FC = () => {
     const getRiskBadgeStyles = (risk: RiskCategory) => {
         switch (risk) {
             case 'CRITICAL':
-                return 'bg-[var(--color-severe-critical-bg)] text-[var(--color-severe-critical)] border-[var(--color-severe-critical)] shadow-[0_0_15px_rgba(220,38,38,0.1)] ring-1 ring-inset ring-red-200';
+                return 'bg-[var(--color-severe-critical-bg)] text-white';
             case 'HIGH':
-                return 'bg-[var(--color-severe-high-bg)] text-[var(--color-severe-high)] border-orange-200 ring-1 ring-inset ring-orange-300';
+                return 'bg-[var(--color-severe-high-bg)] text-white';
             case 'MODERATE':
-                return 'bg-[var(--color-severe-moderate-bg)] text-[var(--color-severe-moderate)] border-amber-200 ring-1 ring-inset ring-amber-300';
+                return 'border border-[var(--color-surface-border)] text-[var(--color-text-main)]';
             case 'LOW':
-                return 'bg-[var(--color-severe-low-bg)] text-[var(--color-severe-low)] border-green-200 ring-1 ring-inset ring-green-300';
+                return 'bg-[var(--color-surface-dark)] text-white';
         }
     };
 
     const totalAnalyses = 18;
     const highRiskCount = cases.filter(c => c.svi.risk_category === 'HIGH').length + 3;
     const criticalCount = cases.filter(c => c.svi.risk_category === 'CRITICAL').length + 1;
-    const processingCount = 0; // Assuming all returned are complete for now
+    const processingCount = 0;
 
     return (
-        <div className="space-y-8 animate-fade-in text-[var(--color-text-main)] font-sans">
-            {/* Welcome Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[var(--color-surface-border)] pb-6">
+        <div className="space-y-12 animate-fade-in text-[var(--color-text-main)] font-sans">
+            {/* Minimal Editorial Header */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--color-surface-border)] pb-8 pt-4">
                 <div>
-                    <h2 className="font-display font-medium text-3xl tracking-tight">
-                        NHAA Triage Console
+                    <h2 className="font-sans font-black text-6xl tracking-tighter leading-none mb-4">
+                        NHAA Console
                     </h2>
-                    <p className="text-[var(--color-text-muted)] text-sm mt-1.5 font-light">
-                        Multimodal Assessment and Rapid Response Interface.
+                    <p className="text-[var(--color-text-main)] text-xl font-medium tracking-tight">
+                        Real-time multimodal intake and response processing network.
                     </p>
                 </div>
 
                 <div
                     onClick={() => navigate('/analysis')}
-                    className="inline-flex items-center gap-2 bg-[var(--color-accent-violet)] text-white hover:bg-[var(--color-accent-violet-hover)] font-medium px-5 py-2.5 rounded-full text-sm transition-all shadow-lg shadow-[var(--color-accent-violet)]/20 focus:ring-2 focus:ring-[var(--color-accent-violet)] hover:scale-[1.02] cursor-pointer"
+                    className="inline-flex items-center gap-3 bg-[var(--color-surface-dark)] text-white hover:bg-[var(--color-accent-violet)] px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors cursor-pointer group"
                 >
-                    <Plus size={16} className="stroke-[2.5]" />
-                    <span>New Case Sequence</span>
+                    <span>New Intake Sequence</span>
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
             </div>
 
-            {/* Metrics Summary cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-[var(--color-surface-card)] border text-[var(--color-text-main)] border-[var(--color-surface-border)] rounded-[32px] p-5 shadow-sm flex flex-col justify-between hover:border-[var(--color-surface-border)] transition-colors group">
-                    <div className="flex justify-between items-start">
-                        <div className="w-10 h-10 rounded-full bg-[var(--color-surface-border)] flex items-center justify-center text-zinc-600">
-                            <Activity size={18} />
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        <h4 className="font-display font-medium text-4xl">{totalAnalyses}</h4>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mt-1">Total Intakes</p>
+            {/* Brutalist Metrics Row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 border-b border-[var(--color-surface-border)]">
+                <div className="p-8 border-r border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)] transition-colors group">
+                    <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-6 border-b border-[var(--color-surface-border)]/20 pb-2">Total Intakes</p>
+                    <div className="flex justify-between items-end">
+                        <h4 className="font-sans font-black text-6xl tracking-tighter">{totalAnalyses}</h4>
+                        <Activity size={24} className="text-[var(--color-text-muted)] mb-2" />
                     </div>
                 </div>
 
-                <div className="bg-[var(--color-surface-card)] border text-[var(--color-text-main)] border-[var(--color-surface-border)] rounded-[32px] p-5 shadow-sm flex flex-col justify-between hover:border-orange-300 transition-colors group">
-                    <div className="flex justify-between items-start">
-                        <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600">
-                            <AlertTriangle size={18} />
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        <h4 className="font-display font-medium text-4xl text-[var(--color-severe-high)]">{highRiskCount}</h4>
-                        <p className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mt-1">Priority Triage</p>
+                <div className="p-8 border-r border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)] transition-colors group">
+                    <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-6 border-b border-[var(--color-surface-border)]/20 pb-2">Priority Triage</p>
+                    <div className="flex justify-between items-end">
+                        <h4 className="font-sans font-black text-6xl tracking-tighter text-[var(--color-accent-violet)]">{highRiskCount}</h4>
+                        <AlertTriangle size={24} className="text-[var(--color-text-muted)] mb-2" />
                     </div>
                 </div>
 
-                <div className="bg-[var(--color-surface-dark)] border-[var(--color-surface-darker)] text-white border rounded-[32px] p-5 shadow-[0_12px_24px_rgba(27,19,64,0.15)] flex flex-col justify-between transition-colors group relative overflow-hidden">
-                    <div className="absolute -right-12 -top-12 w-32 h-32 bg-[var(--color-accent-violet)] rounded-full blur-3xl opacity-50"></div>
-                    <div className="flex justify-between items-start relative z-10">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-white border border-white/20 bg-white/10 shadow-sm">
-                            <TrendingUp size={18} />
-                        </div>
+                <div className="p-8 border-r border-[var(--color-surface-border)] bg-[var(--color-severe-critical-bg)] text-white group overflow-hidden relative">
+                    <p className="text-xs font-bold uppercase tracking-widest mb-6 border-b border-white/20 pb-2 relative z-10">Emergency Alerts</p>
+                    <div className="flex justify-between items-end relative z-10">
+                        <h4 className="font-sans font-black text-6xl tracking-tighter">{criticalCount}</h4>
+                        <TrendingUp size={24} className="mb-2" />
                     </div>
-                    <div className="mt-6 relative z-10">
-                        <h4 className="font-display font-medium text-4xl">{criticalCount}</h4>
-                        <p className="text-[10px] font-semibold text-indigo-200 uppercase tracking-wider mt-1">Emergency Alerts</p>
-                    </div>
+                    {/* Decorative geometry */}
+                    <div className="absolute right-0 bottom-0 w-32 h-32 border-l border-t border-white/20 translate-x-1/2 translate-y-1/2 rounded-full"></div>
                 </div>
 
-                <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] text-[var(--color-text-main)] rounded-[32px] p-5 shadow-sm flex flex-col justify-between group">
-                    <div className="flex justify-between items-start">
-                        <div className="w-10 h-10 rounded-full bg-white border border-[var(--color-surface-border)] flex items-center justify-center text-zinc-700 shadow-sm">
-                            <Headphones size={18} />
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        <h4 className="font-display font-medium text-4xl text-[var(--color-text-light)]">{processingCount}</h4>
-                        <p className="text-[10px] font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mt-1">Active Listeners</p>
+                <div className="p-8 hover:bg-[var(--color-surface-accent-bg)] transition-colors group">
+                    <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-6 border-b border-[var(--color-surface-border)]/20 pb-2">Active Listeners</p>
+                    <div className="flex justify-between items-end">
+                        <h4 className="font-sans font-black text-6xl tracking-tighter text-[var(--color-text-muted)]">{processingCount}</h4>
+                        <Headphones size={24} className="text-[var(--color-text-light)] mb-2" />
                     </div>
                 </div>
             </div>
 
-            {/* RECENT ANALYSES Ledger Section */}
-            <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] shadow-sm overflow-hidden p-2">
-                <div className="p-5 px-6 border-b border-[var(--color-surface-border)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h3 className="font-display font-medium text-lg text-[var(--color-text-main)]">
-                            Case Assessment Ledger
-                        </h3>
-                    </div>
+            {/* Flat Ledger Section */}
+            <div className="pt-8">
+                <div className="flex items-end justify-between border-b-2 border-[var(--color-surface-dark)] pb-4 mb-4">
+                    <h3 className="font-sans font-black text-3xl tracking-tighter uppercase">
+                        Ledger Index
+                    </h3>
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm border-collapse">
+                    <table className="w-full text-left font-sans">
                         <thead>
-                            <tr className="bg-[var(--color-surface-accent-bg)] border-b border-[var(--color-surface-border)] text-[var(--color-text-muted)] font-bold text-[10px] uppercase tracking-widest">
-                                <th className="py-5 px-8">NHAA ID</th>
-                                <th className="py-5 px-4 text-center">Dialect</th>
-                                <th className="py-5 px-4 text-center">Top Classification</th>
-                                <th className="py-5 px-4 text-center">SVI Score</th>
-                                <th className="py-5 px-4 text-center">Triage Stage</th>
-                                <th className="py-5 px-6 text-right">Route</th>
+                            <tr className="text-[var(--color-text-main)] font-bold text-xs uppercase tracking-widest border-b border-[var(--color-surface-border)]">
+                                <th className="py-4 pr-6 w-1/4">Identifier</th>
+                                <th className="py-4 px-6 w-1/6">Origin</th>
+                                <th className="py-4 px-6 w-1/4">Classification Matrix</th>
+                                <th className="py-4 px-6 w-1/6">Severity Index</th>
+                                <th className="py-4 pl-6 text-right w-1/6">Routing</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-100">
+                        <tbody className="divide-y divide-[var(--color-surface-border)]">
                             {cases.map((item) => (
                                 <tr
                                     key={item.case_id}
                                     onClick={() => navigate(`/analysis/${item.case_id}`)}
-                                    className="hover:bg-[var(--color-surface-accent-bg)] transition-all cursor-pointer group"
+                                    className="hover:bg-[var(--color-surface-accent-bg)] transition-colors cursor-pointer group"
                                 >
-                                    <td className="py-5 px-8">
+                                    <td className="py-6 pr-6">
                                         <div className="flex flex-col">
-                                            <span className="font-display font-semibold text-[var(--color-text-main)] group-hover:text-blue-600 transition-colors">
+                                            <span className="font-black text-xl tracking-tight leading-none group-hover:text-[var(--color-accent-violet)] transition-colors">
                                                 {item.case_id}
                                             </span>
-                                            <span className="text-[10px] uppercase tracking-wider font-mono text-[var(--color-text-light)] mt-0.5">{item.filename}</span>
+                                            <span className="text-[10px] uppercase font-bold tracking-widest text-[var(--color-text-muted)] mt-2">
+                                                {item.filename}
+                                            </span>
                                         </div>
                                     </td>
 
-                                    <td className="py-5 px-4 text-center">
-                                        <span className="text-[11px] font-semibold text-zinc-600 bg-white px-2.5 py-1 rounded-md border border-[var(--color-surface-border)] shadow-sm">
+                                    <td className="py-6 px-6">
+                                        <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-main)]">
                                             {item.transcription.language}
                                         </span>
                                     </td>
 
-                                    <td className="py-5 px-4 text-center">
-                                        <span className="text-xs font-medium text-zinc-700">
+                                    <td className="py-6 px-6">
+                                        <span className="text-sm font-bold tracking-tight text-[var(--color-text-main)]">
                                             {item.classification.predicted_class.short_name}
                                         </span>
                                     </td>
 
-                                    <td className="py-5 px-4 text-center">
-                                        <div className="inline-flex items-end font-mono">
-                                            <span className="text-lg font-bold text-[var(--color-text-main)]">{item.svi.score}</span>
+                                    <td className="py-6 px-6">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-2xl font-black tracking-tighter">
+                                                {Math.round(item.svi.score)}
+                                            </span>
+                                            <span className={`px-2 py-1 text-[9px] font-black uppercase tracking-widest ${getRiskBadgeStyles(item.svi.risk_category)}`}>
+                                                {item.svi.risk_category.replace('_', ' ')}
+                                            </span>
                                         </div>
                                     </td>
 
-                                    <td className="py-5 px-4 text-center">
-                                        <span className={`inline-block px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-full ${getRiskBadgeStyles(item.svi.risk_category)}`}>
-                                            {item.svi.risk_category.replace('_', ' ')}
-                                        </span>
-                                    </td>
-
-                                    <td className="py-5 px-8 text-right">
+                                    <td className="py-6 pl-6 text-right">
                                         <button
-                                            className="w-8 h-8 rounded-full bg-[var(--color-surface-border)] hover:bg-[var(--color-text-main)] text-zinc-600 hover:text-white inline-flex items-center justify-center transition-all group-hover:bg-[var(--color-text-main)] group-hover:text-white"
+                                            className="w-10 h-10 border border-[var(--color-surface-border)] text-[var(--color-text-main)] hover:bg-[var(--color-surface-dark)] hover:text-white flex items-center justify-center transition-colors ml-auto rounded-full group-hover:bg-[var(--color-surface-dark)] group-hover:text-white"
                                         >
-                                            <ArrowRight size={14} className="-rotate-45" />
+                                            <ArrowRight size={16} className="-rotate-45" />
                                         </button>
                                     </td>
                                 </tr>

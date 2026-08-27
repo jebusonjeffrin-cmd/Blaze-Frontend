@@ -2,44 +2,47 @@
 
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Connectr Color Palette */
-  --color-surface-base: #f5f6fe;
-  /* Soft Lavender/Ice BG */
-  --color-surface-card: #ffffff;
-  --color-surface-dark: #1b1340;
-  /* Rich Navy/Violet containers */
-  --color-surface-darker: #130d2d;
-  --color-surface-border: #e9eaff;
-  --color-surface-accent-bg: #f3f4fd;
-  /* Connectr specific soft blocks */
+  /* Boost Capital Flat Editorial Palette */
+  --color-surface-base: #F4EFE8;
+  /* Warm creamy beige */
+  --color-surface-card: transparent;
+  /* No cards; everything is flat */
+  --color-surface-dark: #282828;
+  /* Deep charcoal for solid headers */
+  --color-surface-darker: #1A1A1A;
+  --color-surface-border: #282828;
+  /* Sharp charcoal dividers */
+  --color-surface-accent-bg: #EADCD0;
+  /* Very soft beige highlight */
 
-  /* Connectr Text Colors */
-  --color-text-main: #141031;
-  /* Deep Navy */
-  --color-text-muted: #645f82;
-  --color-text-light: #9896b4;
+  /* Text Colors */
+  --color-text-main: #282828;
+  --color-text-muted: #6B6A66;
+  /* Subdued earth charcoal */
+  --color-text-light: #94938D;
 
-  /* Connectr Active Accents */
-  --color-accent-violet: #7e69f8;
-  --color-accent-violet-hover: #6b5aed;
-  --color-accent-violet-faded: rgba(126, 105, 248, 0.1);
+  /* Boost Accents */
+  --color-accent-violet: #D96B25;
+  /* Rusty Orange remapped onto primary action tokens */
+  --color-accent-violet-hover: #BF5E20;
+  --color-accent-violet-faded: rgba(217, 107, 37, 0.1);
 
-  /* NHAA Triage Severity Tokens (Mapped to Connectr System) */
-  --color-severe-critical: #ffffff;
-  --color-severe-critical-bg: #e11d48;
-  /* Red rose */
-  --color-severe-high: #ffffff;
-  --color-severe-high-bg: #ea580c;
-  --color-severe-moderate: #ffffff;
-  --color-severe-moderate-bg: #141031;
-  /* Deep navy mapping for standard tags */
-  --color-severe-low: #ffffff;
-  --color-severe-low-bg: #7e69f8;
-  /* Standard connectr violet */
+  /* NHAA Triage Severity Tokens (Mapped to Brutalist Contrast) */
+  --color-severe-critical: #F4EFE8;
+  --color-severe-critical-bg: #D93125;
+  /* Brutalist stark flat red */
+  --color-severe-high: #F4EFE8;
+  --color-severe-high-bg: #D96B25;
+  /* Rusty orange for high */
+  --color-severe-moderate: #282828;
+  --color-severe-moderate-bg: transparent;
+  /* Outlined in UI normally */
+  --color-severe-low: #F4EFE8;
+  --color-severe-low-bg: #282828;
 
-  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-up: slideUp 0.3s ease-out forwards;
 
   --animate-waveform: waveform 1.2s ease-in-out infinite;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
