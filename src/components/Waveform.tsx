@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import type { MouseEvent } from 'react';
 
 interface WaveformProps {
-    waveform: number[]; // Array of heights (0-100)
-    currentTime: number; // in seconds
-    duration: number; // in seconds
+    waveform: number[];
+    currentTime: number;
+    duration: number;
     onSeek: (time: number) => void;
 }
 
@@ -19,14 +19,12 @@ const Waveform: React.FC<WaveformProps> = ({ waveform, currentTime, duration, on
         const clickX = e.clientX - rect.left;
         const width = rect.width;
 
-        // Calculate click ratio
         const ratio = clickX / width;
         const seekTime = ratio * duration;
 
         onSeek(seekTime);
     };
 
-    // Convert seconds to MM:SS format
     const formatTime = (time: number) => {
         if (isNaN(time)) return '00:00';
         const mins = Math.floor(time / 60);
@@ -35,12 +33,12 @@ const Waveform: React.FC<WaveformProps> = ({ waveform, currentTime, duration, on
     };
 
     return (
-        <div className="space-y-2 select-none">
+        <div className="space-y-3 select-none w-full">
             {/* Waveform Visualization Bars */}
             <div
                 ref={containerRef}
                 onClick={handleClick}
-                className="h-16 flex items-end justify-between gap-[2px] cursor-pointer group/wave relative py-2"
+                className="h-20 flex items-end justify-between gap-[3px] cursor-pointer group/wave relative py-2"
                 role="slider"
                 aria-label="Audio timeline track scrubber"
                 aria-valuemin={0}
@@ -48,24 +46,23 @@ const Waveform: React.FC<WaveformProps> = ({ waveform, currentTime, duration, on
                 aria-valuenow={currentTime}
             >
                 {/* Hover Highlight Layer */}
-                <div className="absolute inset-y-0 left-0 bg-teal-500/5 group-hover/wave:block hidden pointer-events-none transition-all rounded-lg" />
+                <div className="absolute inset-y-0 left-0 bg-black/5 group-hover/wave:block hidden pointer-events-none transition-all rounded-xl" />
 
                 {waveform.map((height, index) => {
-                    // Determine if this bar was already played
                     const barPercent = (index / waveform.length) * 100;
                     const isPlayed = barPercent <= progressPercent;
 
                     return (
                         <div
                             key={index}
-                            className={`w-full rounded-full transition-all duration-300 ${isPlayed
-                                ? 'bg-teal-600 group-hover/wave:bg-teal-500'
-                                : 'bg-slate-200'
+                            className={`w-full rounded-sm transition-all duration-300 ${isPlayed
+                                ? 'bg-zinc-900 group-hover/wave:bg-black shadow-[0_0_8px_rgba(0,0,0,0.1)]'
+                                : 'bg-zinc-200'
                                 }`}
                             style={{
-                                height: `${Math.max(height, 10)}%`,
+                                height: `${Math.max(height, 8)}%`,
                                 // Scale highlight on played bars when hovered
-                                transform: isPlayed ? 'scaleY(1.02)' : 'none',
+                                transform: isPlayed ? 'scaleY(1.1)' : 'none',
                             }}
                         />
                     );
@@ -73,8 +70,8 @@ const Waveform: React.FC<WaveformProps> = ({ waveform, currentTime, duration, on
             </div>
 
             {/* Scrubber Navigation details */}
-            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 font-semibold px-0.5">
-                <span>{formatTime(currentTime)}</span>
+            <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400 font-semibold px-1 tracking-widest uppercase">
+                <span className="text-black">{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
             </div>
         </div>
