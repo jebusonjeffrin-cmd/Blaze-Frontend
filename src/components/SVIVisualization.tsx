@@ -29,7 +29,7 @@ const SVIVisualization: React.FC<SVIVisualizationProps> = ({ sviData }) => {
     const safetyOverrideBadge = sviData.safety_overrides.length > 0;
 
     return (
-        <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[20px] p-6 lg:p-8 shadow-sm flex flex-col justify-between h-full select-none text-[var(--color-text-main)] w-full font-sans transition-colors">
+        <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 lg:p-8 shadow-sm flex flex-col justify-between h-full select-none text-[var(--color-text-main)] w-full font-sans transition-colors">
 
             <div className="flex items-center justify-between mb-6">
                 <div>
@@ -121,12 +121,12 @@ const SVIVisualization: React.FC<SVIVisualizationProps> = ({ sviData }) => {
 
             {/* Warning statutory / policy banner */}
             <div className="border-t border-[var(--color-surface-border)] pt-5 mt-6 relative z-10 w-full">
-                <div className="flex items-start gap-4 p-4 rounded-xl bg-zinc-50 border border-zinc-200 shadow-inner">
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-[var(--color-surface-accent-bg)] border border-[var(--color-surface-border)] shadow-inner">
                     <div className="text-[var(--color-text-main)] shrink-0">
                         <ShieldAlert size={18} strokeWidth={2} />
                     </div>
                     <div>
-                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-none">
+                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest leading-none">
                             System Evaluation Brief
                         </p>
                         <p className="text-xs text-zinc-700 mt-2 font-medium leading-relaxed">

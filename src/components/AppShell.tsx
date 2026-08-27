@@ -18,21 +18,11 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [operator, setOperator] = useState<Operator | null>(null);
-    const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
         const currentOperator = authService.getOperator();
-        if (!currentOperator) {
-            navigate('/login');
-        } else {
-            setOperator(currentOperator);
-        }
-
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(timer);
+        if (!currentOperator) navigate('/login');
+        else setOperator(currentOperator);
     }, [navigate]);
 
     const handleLogout = () => {
@@ -49,40 +39,38 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const currentPath = location.pathname;
 
     return (
-        <div className="min-h-screen bg-[var(--color-surface-base)] flex flex-col font-sans text-zinc-900 selection:bg-[var(--color-accent-lime)] selection:text-black">
+        <div className="min-h-screen bg-[var(--color-surface-base)] flex flex-col font-sans text-[var(--color-text-main)] selection:bg-[var(--color-accent-violet)] selection:text-white">
 
-            {/* V2 Floating Navigation Pill (Previous Design) - Updated to Light Theme */}
-            <header className="fixed top-6 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl border border-zinc-200/80 rounded-full px-2 py-2 flex items-center justify-between w-[95%] max-w-[1200px] z-[100] shadow-xl shadow-black/5">
+            {/* Connectr V2 Full Span Navigation */}
+            <header className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-xl border-b border-[var(--color-surface-border)] px-8 py-3 flex items-center justify-between z-[100] shadow-sm">
 
                 {/* Brand Logo & Name */}
-                <Link to="/dashboard" className="flex items-center gap-3 pl-4 pr-6 shrink-0 group">
-                    <div className="w-8 h-8 rounded-full bg-zinc-900 overflow-hidden flex items-center justify-center relative">
-                        <div className="absolute inset-0 opacity-20 bg-gradient-to-tr from-transparent via-transparent to-white group-hover:opacity-100 transition-opacity"></div>
-                        <Activity size={16} className="text-[var(--color-accent-lime)]" />
+                <Link to="/dashboard" className="flex items-center gap-3 group">
+                    <div className="w-10 h-10 rounded-full bg-[var(--color-accent-violet)] overflow-hidden flex items-center justify-center relative shadow-sm">
+                        <Activity size={18} className="text-white relative z-10" />
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-display font-medium tracking-wide text-zinc-900 leading-none">
-                            Sahaaya <span className="font-light">AI</span>
+                        <span className="font-display font-bold tracking-tight text-[var(--color-text-main)] text-lg leading-tight">
+                            Sahaaya AI
                         </span>
-                        <span className="text-[9px] uppercase tracking-widest text-zinc-500 mt-1 font-mono">v2.4.0-stable</span>
+                        <span className="text-[10px] font-semibold text-[var(--color-accent-violet)] tracking-widest mt-0.5">V2.0 CONNECT</span>
                     </div>
                 </Link>
 
                 {/* Central Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-1.5 p-1 bg-zinc-100/50 rounded-full border border-zinc-200/50 backdrop-blur-sm">
+                <nav className="hidden md:flex items-center gap-8 font-medium text-sm">
                     {navItems.map((item) => {
                         const isActive = currentPath.startsWith(item.path);
-                        const Icon = item.icon;
                         return (
                             <Link
                                 key={item.path}
                                 to={item.path}
-                                className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${isActive
-                                    ? 'bg-white text-zinc-900 shadow-sm border border-zinc-200'
-                                    : 'text-zinc-500 hover:text-zinc-900 hover:bg-white/50'
+                                className={`transition-all pb-1 hover:text-[var(--color-accent-violet)] ${isActive
+                                        ? 'text-[var(--color-accent-violet)] border-b-2 border-[var(--color-accent-violet)]'
+                                        : 'text-[var(--color-text-muted)] border-b-2 border-transparent'
                                     }`}
                             >
-                                <Icon size={14} className={isActive ? 'text-[var(--color-accent-lime-hover)]' : ''} />
                                 {item.name}
                             </Link>
                         );
@@ -91,31 +79,26 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
                 {/* Operator Session Metrics / Logout */}
                 {operator && (
-                    <div className="flex items-center gap-3 pr-2 shrink-0">
-                        {/* Secure status indicator */}
-                        <div className="hidden lg:flex flex-col items-end mr-4">
-                            <div className="flex items-center gap-1.5 align-baseline">
-                                <Shield size={10} className="text-emerald-500" />
-                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Sys.Secure</span>
-                            </div>
-                            <span className="text-[9px] font-mono text-zinc-400 mt-1">{currentTime.toISOString().split('T')[1].slice(0, 8)} UTC</span>
+                    <div className="flex items-center gap-6">
+                        <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-[var(--color-text-muted)] bg-[var(--color-surface-accent-bg)] px-3 py-1.5 rounded-full border border-[var(--color-surface-border)]">
+                            <Shield size={12} className="text-[var(--color-accent-violet)]" />
+                            Sys.Secure
                         </div>
 
-                        {/* Profile Pill */}
-                        <div className="flex items-center gap-3 bg-zinc-100 border border-zinc-200 pl-3 pr-1 py-1 rounded-full">
+                        <div className="flex items-center gap-3">
                             <div className="text-right hidden sm:block">
-                                <div className="text-xs font-bold text-zinc-900 tracking-wide">{operator.name}</div>
-                                <div className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">{operator.id}</div>
+                                <div className="text-sm font-bold text-[var(--color-text-main)]">{operator.name}</div>
+                                <div className="text-[10px] font-semibold text-[var(--color-text-light)] uppercase tracking-wider">{operator.id}</div>
                             </div>
-                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                            <div className="w-9 h-9 rounded-full bg-[var(--color-surface-dark)] flex items-center justify-center text-white text-sm font-bold shadow-md">
                                 {operator.name.charAt(0)}
                             </div>
                             <button
                                 onClick={handleLogout}
-                                className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-500 hover:text-white text-red-500 flex items-center justify-center transition-all ml-1 group"
+                                className="w-9 h-9 flex items-center justify-center rounded-full bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all ml-1 shadow-sm"
                                 title="Terminate Session"
                             >
-                                <LogOut size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+                                <LogOut size={14} />
                             </button>
                         </div>
                     </div>
@@ -123,7 +106,7 @@ const AppShell: React.FC<AppShellProps> = ({ children }) => {
             </header>
 
             {/* Main Workspace Frame */}
-            <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 md:px-8 pt-32 pb-16">
+            <main className="flex-1 w-full max-w-[1300px] mx-auto px-4 sm:px-6 md:px-8 pt-24 pb-16">
                 <div className="animate-fade-in transition-all duration-300 h-full">
                     {children}
                 </div>

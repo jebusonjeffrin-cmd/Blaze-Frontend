@@ -148,7 +148,7 @@ const VoiceAnalysis: React.FC = () => {
         <div className="space-y-8 animate-fade-in text-[var(--color-text-main)] font-sans">
 
             {/* Page Header */}
-            <div className="border-b border-zinc-200 pb-6">
+            <div className="border-b border-[var(--color-surface-border)] pb-6">
                 <h2 className="font-display font-medium text-3xl tracking-tight">
                     Voice Analysis Terminal
                 </h2>
@@ -163,13 +163,13 @@ const VoiceAnalysis: React.FC = () => {
                 <div className="lg:col-span-2 space-y-6">
 
                     {/* Microphone Capture Box */}
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm overflow-hidden relative">
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm overflow-hidden relative">
                         <h3 className="font-display font-medium text-lg mb-4">
                             Live Microphone Triage
                         </h3>
 
                         {isRecording ? (
-                            <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-100 rounded-xl">
+                            <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-100 rounded-[32px]">
                                 <div className="text-red-500 mb-4 animate-pulse">
                                     <Mic size={48} />
                                 </div>
@@ -197,7 +197,7 @@ const VoiceAnalysis: React.FC = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center p-8 bg-zinc-50 border border-zinc-100 rounded-xl hover:bg-zinc-100 transition-colors">
+                            <div className="flex flex-col items-center justify-center p-8 bg-[var(--color-surface-accent-bg)] border border-[var(--color-surface-border)] rounded-[32px] hover:bg-[var(--color-surface-border)] transition-colors">
                                 <button
                                     onClick={toggleRecording}
                                     className="w-20 h-20 bg-[var(--color-text-main)] hover:bg-black text-white rounded-full flex items-center justify-center shadow-xl shadow-black/10 transition-all hover:scale-105 mb-4"
@@ -205,26 +205,26 @@ const VoiceAnalysis: React.FC = () => {
                                     <Mic size={32} />
                                 </button>
                                 <p className="font-semibold text-sm">Initialize Microphone Pipeline</p>
-                                <p className="text-xs text-zinc-500 mt-1">Requires browser hardware consent.</p>
+                                <p className="text-xs text-[var(--color-text-muted)] mt-1">Requires browser hardware consent.</p>
                             </div>
                         )}
                     </div>
 
                     {/* File Upload Box */}
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm">
                         <h3 className="font-display font-medium text-lg mb-4">
                             Batch File Ingest
                         </h3>
 
                         {uploading ? (
-                            <div className="border-2 border-dashed border-lime-200 bg-lime-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-4">
-                                <span className="w-10 h-10 border-4 border-zinc-100 border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
+                            <div className="border-2 border-dashed border-lime-200 bg-lime-50/10 rounded-[32px] p-12 text-center flex flex-col items-center justify-center gap-4">
+                                <span className="w-10 h-10 border-4 border-[var(--color-surface-border)] border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
                                 <div>
                                     <p className="text-sm font-semibold text-zinc-700">Connecting Audio Pipeline...</p>
                                 </div>
                             </div>
                         ) : uploadSuccess ? (
-                            <div className="border-2 border-dashed border-green-200 bg-green-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                            <div className="border-2 border-dashed border-green-200 bg-green-50/10 rounded-[32px] p-12 text-center flex flex-col items-center justify-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
                                     <ShieldCheck size={20} />
                                 </div>
@@ -238,9 +238,9 @@ const VoiceAnalysis: React.FC = () => {
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
-                                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
+                                className={`border-2 border-dashed rounded-[32px] p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
                                     ? 'border-blue-500 bg-blue-50/30'
-                                    : 'border-zinc-300 hover:border-zinc-400 bg-zinc-50'
+                                    : 'border-[var(--color-surface-border)] hover:border-[var(--color-surface-border)] bg-[var(--color-surface-accent-bg)]'
                                     }`}
                             >
                                 <input
@@ -249,22 +249,22 @@ const VoiceAnalysis: React.FC = () => {
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                     onChange={handleFileChange}
                                 />
-                                <div className="w-12 h-12 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:text-blue-600 group-hover:scale-105 transition-all shadow-sm">
+                                <div className="w-12 h-12 rounded-full bg-white border border-[var(--color-surface-border)] flex items-center justify-center text-[var(--color-text-light)] group-hover:text-blue-600 group-hover:scale-105 transition-all shadow-sm">
                                     <Upload size={18} />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-zinc-700">
                                         Drag and drop historical audio encodings here
                                     </p>
-                                    <p className="text-xs text-zinc-400 mt-1 font-light">
+                                    <p className="text-xs text-[var(--color-text-light)] mt-1 font-light">
                                         Supports encrypted WAV/M4A payload bundles
                                     </p>
                                 </div>
                             </label>
                         )}
 
-                        <div className="mt-4 flex items-start gap-2.5 bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-xs text-zinc-500 leading-normal font-light">
-                            <AlertTriangle size={15} className="text-zinc-400 shrink-0 mt-0.5" />
+                        <div className="mt-4 flex items-start gap-2.5 bg-[var(--color-surface-accent-bg)] border border-[var(--color-surface-border)] rounded-[32px] p-3 text-xs text-[var(--color-text-muted)] leading-normal font-light">
+                            <AlertTriangle size={15} className="text-[var(--color-text-light)] shrink-0 mt-0.5" />
                             <p>
                                 NHAA Standard: Audio data is processed in-memory. Residual buffer artifacts are immediately scrubbed upon completion of diagnostic mapping.
                             </p>
@@ -274,7 +274,7 @@ const VoiceAnalysis: React.FC = () => {
 
                 {/* RIGHT COLUMN: Recent Presets */}
                 <div className="space-y-6">
-                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm">
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-[32px] p-6 shadow-sm">
                         <h3 className="font-display font-medium text-lg mb-1">
                             Load NHAA Architecture Demo
                         </h3>
@@ -286,7 +286,7 @@ const VoiceAnalysis: React.FC = () => {
                             {cases.slice(0, 2).map((item) => (
                                 <div
                                     key={item.case_id}
-                                    className="border border-zinc-200 rounded-xl p-4 hover:border-zinc-300 hover:bg-zinc-50 transition-all group flex flex-col justify-between"
+                                    className="border border-[var(--color-surface-border)] rounded-[32px] p-4 hover:border-[var(--color-surface-border)] hover:bg-[var(--color-surface-accent-bg)] transition-all group flex flex-col justify-between"
                                 >
                                     <div>
                                         <div className="flex items-center justify-between">
@@ -298,22 +298,22 @@ const VoiceAnalysis: React.FC = () => {
                                             </span>
                                         </div>
 
-                                        <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-light font-mono">
+                                        <div className="flex gap-4 mt-3 text-xs text-[var(--color-text-muted)] font-light font-mono">
                                             <span className="flex items-center gap-1">
                                                 <Languages size={12} />
                                                 {item.transcription.language}
                                             </span>
                                         </div>
 
-                                        <p className="text-xs text-zinc-600 mt-3 italic line-clamp-1 border-l-2 border-zinc-300 pl-2">
+                                        <p className="text-xs text-zinc-600 mt-3 italic line-clamp-1 border-l-2 border-[var(--color-surface-border)] pl-2">
                                             "{item.transcription.text}"
                                         </p>
                                     </div>
 
-                                    <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3 mt-3">
+                                    <div className="flex items-center justify-end gap-2 border-t border-[var(--color-surface-border)] pt-3 mt-3">
                                         <button
                                             onClick={() => handleSelectCase(item.case_id, true)}
-                                            className="text-[11px] font-semibold text-[var(--color-text-main)] hover:text-white bg-zinc-100 hover:bg-zinc-800 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                                            className="text-[11px] font-semibold text-[var(--color-text-main)] hover:text-white bg-[var(--color-surface-border)] hover:bg-zinc-800 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                                         >
                                             <Play size={11} className="stroke-[2.5]" />
                                             <span>Inject Payload</span>

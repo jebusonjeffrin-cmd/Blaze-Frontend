@@ -17,7 +17,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({ transcription, acti
         <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm flex flex-col h-[400px] select-none font-sans text-[var(--color-text-main)] w-full transition-colors">
 
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
+            <div className="flex items-center justify-between pb-4 border-b border-[var(--color-surface-border)]">
                 <div>
                     <h3 className="font-display font-medium text-lg text-[var(--color-text-main)]">
                         Time-Aligned Transcription Tray
@@ -27,7 +27,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({ transcription, acti
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase font-bold text-zinc-500 bg-zinc-50 px-2 py-1 rounded-md border border-zinc-200">
+                    <span className="text-[10px] uppercase font-bold text-[var(--color-text-muted)] bg-[var(--color-surface-accent-bg)] px-2 py-1 rounded-md border border-[var(--color-surface-border)]">
                         {transcription.language}
                     </span>
                 </div>
@@ -46,7 +46,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({ transcription, acti
                                 title={`Self-Attention: ${wordObj.cross_attention_weight.toFixed(2)}`}
                                 className={`
                                     relative inline-flex items-center px-1 rounded-md transition-colors duration-75 group cursor-help
-                                    ${isActivelyPlaying ? 'bg-zinc-200 text-black font-semibold' : 'text-zinc-800'}
+                                    ${isActivelyPlaying ? 'bg-zinc-200 text-black font-semibold' : 'text-[var(--color-text-main)]'}
                                     ${wordObj.is_threat_word ? 'border border-[var(--color-severe-critical)] bg-red-50 text-[var(--color-severe-critical)] font-medium px-2 shadow-sm' : ''}
                                 `}
                             >
@@ -68,7 +68,7 @@ const TranscriptViewer: React.FC<TranscriptViewerProps> = ({ transcription, acti
             </div>
 
             {/* Info indicator */}
-            <div className="mt-4 border-t border-zinc-100 pt-4 flex items-center gap-1.5 text-[10px] text-zinc-400 uppercase tracking-widest font-bold">
+            <div className="mt-4 border-t border-[var(--color-surface-border)] pt-4 flex items-center gap-1.5 text-[10px] text-[var(--color-text-light)] uppercase tracking-widest font-bold">
                 <Info size={12} />
                 <span>Hover active threat words for MuRIL model attention weights</span>
             </div>

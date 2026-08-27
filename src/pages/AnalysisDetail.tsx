@@ -31,7 +31,7 @@ const AnalysisDetail: React.FC = () => {
     if (loading) {
         return (
             <div className="min-h-[60vh] flex flex-col justify-center items-center gap-4">
-                <span className="w-10 h-10 border-4 border-zinc-100 border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
+                <span className="w-10 h-10 border-4 border-[var(--color-surface-border)] border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
                 <p className="text-sm font-light text-[var(--color-text-muted)]">Loading NHAA architecture...</p>
             </div>
         );
@@ -41,7 +41,7 @@ const AnalysisDetail: React.FC = () => {
         return (
             <div className="min-h-[60vh] flex flex-col justify-center items-center gap-4 text-center max-w-md mx-auto">
                 <AlertTriangle size={42} className="text-red-500 stroke-[1.5]" />
-                <h3 className="text-lg font-bold text-zinc-800 tracking-tight">Case Assessment Not Found</h3>
+                <h3 className="text-lg font-bold text-[var(--color-text-main)] tracking-tight">Case Assessment Not Found</h3>
                 <Link
                     to="/dashboard"
                     className="mt-4 text-xs font-semibold text-white bg-zinc-900 hover:bg-black px-4 py-2 rounded-lg"
@@ -56,7 +56,7 @@ const AnalysisDetail: React.FC = () => {
         <div className="space-y-8 animate-fade-in text-[var(--color-text-main)] font-sans">
 
             {/* Header */}
-            <div className="border-b border-zinc-200 pb-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="border-b border-[var(--color-surface-border)] pb-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="space-y-1.5 flex-1">
                     <Link
                         to="/dashboard"
@@ -69,7 +69,7 @@ const AnalysisDetail: React.FC = () => {
                         <h2 className="font-display font-medium text-4xl tracking-tight leading-none">
                             {item.case_id}
                         </h2>
-                        <span className="text-xs text-[var(--color-text-muted)] font-mono bg-zinc-100 border border-zinc-200 rounded-md px-2 py-1 leading-none shadow-sm h-fit pb-1.5">
+                        <span className="text-xs text-[var(--color-text-muted)] font-mono bg-[var(--color-surface-border)] border border-[var(--color-surface-border)] rounded-md px-2 py-1 leading-none shadow-sm h-fit pb-1.5">
                             {item.filename}
                         </span>
                     </div>
@@ -86,8 +86,8 @@ const AnalysisDetail: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="max-w-md bg-white border border-zinc-200 p-4 rounded-xl shadow-sm hidden md:block">
-                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">Executive Brief</p>
+                <div className="max-w-md bg-white border border-[var(--color-surface-border)] p-4 rounded-[32px] shadow-sm hidden md:block">
+                    <p className="text-[10px] font-bold text-[var(--color-text-light)] uppercase tracking-widest mb-1.5">Executive Brief</p>
                     <p className="text-xs text-zinc-700 leading-relaxed font-medium">
                         {item.admin_executive_brief}
                     </p>
@@ -107,10 +107,10 @@ const AnalysisDetail: React.FC = () => {
                             Action Remits & Recommendations
                         </h3>
                         {item.recommendations.map((rec, idx) => (
-                            <div key={idx} className="bg-white border border-[var(--color-surface-border)] rounded-[20px] p-5 shadow-sm space-y-3">
+                            <div key={idx} className="bg-white border border-[var(--color-surface-border)] rounded-[32px] p-5 shadow-sm space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-100 border border-zinc-200 text-lg shadow-sm">
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--color-surface-border)] border border-[var(--color-surface-border)] text-lg shadow-sm">
                                             {rec.icon}
                                         </div>
                                         <div>
@@ -144,13 +144,13 @@ const AnalysisDetail: React.FC = () => {
                             Algorithmic Substrates
                         </h3>
                         {item.detected_signs.map((sign, idx) => (
-                            <div key={idx} className="p-4 bg-[var(--color-surface-base)] border border-[var(--color-surface-border)] rounded-xl flex items-start gap-4">
-                                <div className="text-[10px] font-bold text-zinc-700 bg-white border border-zinc-200 uppercase tracking-widest px-2 py-0.5 rounded shadow-sm shrink-0">
+                            <div key={idx} className="p-4 bg-[var(--color-surface-base)] border border-[var(--color-surface-border)] rounded-[32px] flex items-start gap-4">
+                                <div className="text-[10px] font-bold text-zinc-700 bg-white border border-[var(--color-surface-border)] uppercase tracking-widest px-2 py-0.5 rounded shadow-sm shrink-0">
                                     {sign.type}
                                 </div>
                                 <div>
-                                    <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{sign.source}</div>
-                                    <p className="text-xs font-semibold text-zinc-800">{sign.sign}</p>
+                                    <div className="text-[10px] font-bold text-[var(--color-text-light)] uppercase tracking-widest mb-1">{sign.source}</div>
+                                    <p className="text-xs font-semibold text-[var(--color-text-main)]">{sign.sign}</p>
                                 </div>
                             </div>
                         ))}

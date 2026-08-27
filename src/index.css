@@ -1,34 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
 
-  /* Authentic Tabela Grayscale */
-  --color-surface-base: #f0f0f0;
+  /* Connectr Color Palette */
+  --color-surface-base: #f5f6fe;
+  /* Soft Lavender/Ice BG */
   --color-surface-card: #ffffff;
-  --color-surface-dark: #27272a;
-  --color-surface-darker: #18181b;
-  --color-surface-border: #e4e4e7;
+  --color-surface-dark: #1b1340;
+  /* Rich Navy/Violet containers */
+  --color-surface-darker: #130d2d;
+  --color-surface-border: #e9eaff;
+  --color-surface-accent-bg: #f3f4fd;
+  /* Connectr specific soft blocks */
 
-  /* Text Colors */
-  --color-text-main: #111111;
-  --color-text-muted: #71717a;
-  --color-text-light: #a1a1aa;
+  /* Connectr Text Colors */
+  --color-text-main: #141031;
+  /* Deep Navy */
+  --color-text-muted: #645f82;
+  --color-text-light: #9896b4;
 
-  /* Authentic Tabela Accent (Pale Lime/Chartreuse) */
-  --color-accent-lime: #d9f13b;
-  --color-accent-lime-hover: #c4dc2a;
+  /* Connectr Active Accents */
+  --color-accent-violet: #7e69f8;
+  --color-accent-violet-hover: #6b5aed;
+  --color-accent-violet-faded: rgba(126, 105, 248, 0.1);
 
-  /* NHAA Triage Severity Tokens (Mapped to Tabela Contrast) */
-  --color-severe-critical: #111111;
-  --color-severe-critical-bg: #d9f13b;
+  /* NHAA Triage Severity Tokens (Mapped to Connectr System) */
+  --color-severe-critical: #ffffff;
+  --color-severe-critical-bg: #e11d48;
+  /* Red rose */
   --color-severe-high: #ffffff;
-  --color-severe-high-bg: #27272a;
-  --color-severe-moderate: #71717a;
-  --color-severe-moderate-bg: #f4f4f5;
-  --color-severe-low: #18181b;
-  --color-severe-low-bg: #e4e4e7;
+  --color-severe-high-bg: #ea580c;
+  --color-severe-moderate: #ffffff;
+  --color-severe-moderate-bg: #141031;
+  /* Deep navy mapping for standard tags */
+  --color-severe-low: #ffffff;
+  --color-severe-low-bg: #7e69f8;
+  /* Standard connectr violet */
 
   --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
