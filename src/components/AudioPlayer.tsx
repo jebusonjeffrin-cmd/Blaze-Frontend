@@ -67,7 +67,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ waveform, durationSec, onTime
     };
 
     return (
-        <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm shadow-slate-100/30 space-y-4">
+        <div className="bg-white border border-zinc-100 rounded-2xl p-5 shadow-sm shadow-zinc-100/30 space-y-4">
             {/* Waveform Player component */}
             <Waveform
                 waveform={waveform}
@@ -77,12 +77,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ waveform, durationSec, onTime
             />
 
             {/* Scrubber Controls */}
-            <div className="flex items-center justify-between border-t border-slate-100 pt-4 gap-4 flex-wrap sm:flex-nowrap">
+            <div className="flex items-center justify-between border-t border-zinc-100 pt-4 gap-4 flex-wrap sm:flex-nowrap">
                 {/* Play/Pause controls */}
                 <div className="flex items-center gap-3">
                     <button
                         onClick={togglePlay}
-                        className="w-10 h-10 rounded-xl bg-teal-600 hover:bg-teal-700 active:scale-95 text-white flex items-center justify-center transition-all shadow-md shadow-teal-500/10 cursor-pointer"
+                        className="w-10 h-10 rounded-xl bg-lime-600 hover:bg-lime-700 active:scale-95 text-white flex items-center justify-center transition-all shadow-md shadow-lime-500/10 cursor-pointer"
                         aria-label={isPlaying ? 'Pause call playback' : 'Play call playback'}
                     >
                         {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
@@ -90,7 +90,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ waveform, durationSec, onTime
 
                     <button
                         onClick={handleReset}
-                        className="w-9 h-9 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
+                        className="w-9 h-9 rounded-lg bg-zinc-50 hover:bg-zinc-100 text-zinc-500 flex items-center justify-center transition-colors cursor-pointer"
                         aria-label="Restart call audio"
                     >
                         <RotateCcw size={15} />
@@ -102,7 +102,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ waveform, durationSec, onTime
                     {/* Audio volume mute togglers */}
                     <button
                         onClick={() => setMuted(!muted)}
-                        className="p-1 px-2.5 text-xs text-slate-500 rounded-lg hover:bg-slate-50 flex items-center gap-1.5 transition-colors border border-slate-100"
+                        className="p-1 px-2.5 text-xs text-zinc-500 rounded-lg hover:bg-zinc-50 flex items-center gap-1.5 transition-colors border border-zinc-100"
                         aria-label={muted ? 'Unmute' : 'Mute'}
                     >
                         {muted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} />}
@@ -112,14 +112,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ waveform, durationSec, onTime
                     </button>
 
                     {/* Speed settings */}
-                    <div className="flex items-center gap-1 text-[11px] font-mono text-slate-400 bg-slate-50 border border-slate-100 p-0.5 rounded-lg">
+                    <div className="flex items-center gap-1 text-[11px] font-mono text-zinc-400 bg-zinc-50 border border-zinc-100 p-0.5 rounded-lg">
                         {[1, 1.5, 2].map((val) => (
                             <button
                                 key={val}
                                 onClick={() => setSpeed(val)}
                                 className={`px-2.5 py-1 rounded-md font-semibold font-mono transition-colors ${speed === val
-                                    ? 'bg-white text-teal-700 shadow-xs'
-                                    : 'hover:text-slate-700 text-slate-400'
+                                    ? 'bg-white text-lime-700 shadow-xs'
+                                    : 'hover:text-zinc-700 text-zinc-400'
                                     }`}
                             >
                                 {val}x

@@ -8,8 +8,8 @@
   --color-surface-base: #f0f0f0;
   --color-surface-card: #ffffff;
   --color-surface-dark: #27272a;
-  /* For contrasting dark cards */
   --color-surface-darker: #18181b;
+  --color-surface-border: #e4e4e7;
 
   /* Text Colors */
   --color-text-main: #111111;
@@ -20,10 +20,21 @@
   --color-accent-lime: #d9f13b;
   --color-accent-lime-hover: #c4dc2a;
 
+  /* NHAA Triage Severity Tokens (Mapped to Tabela Contrast) */
+  --color-severe-critical: #111111;
+  --color-severe-critical-bg: #d9f13b;
+  --color-severe-high: #ffffff;
+  --color-severe-high-bg: #27272a;
+  --color-severe-moderate: #71717a;
+  --color-severe-moderate-bg: #f4f4f5;
+  --color-severe-low: #18181b;
+  --color-severe-low-bg: #e4e4e7;
+
+  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
   --animate-waveform: waveform 1.2s ease-in-out infinite;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-fade-in: fadeIn 0.4s ease-out forwards;
-  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes waveform {

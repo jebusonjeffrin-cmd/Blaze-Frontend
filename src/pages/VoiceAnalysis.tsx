@@ -1,30 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, Play, Languages, Clock, AlertTriangle, ShieldCheck, ChevronRight } from 'lucide-react';
-import type { CaseAssessment } from '../types';
+import { Upload, Play, Languages, AlertTriangle, ShieldCheck, Mic, Square } from 'lucide-react';
+import type { NHAAPayload } from '../types';
 import { analysisService } from '../services/analysisService';
 
 const VoiceAnalysis: React.FC = () => {
     const navigate = useNavigate();
-    const [cases, setCases] = useState<CaseAssessment[]>([]);
+    const [cases, setCases] = useState<NHAAPayload[]>([]);
+
+    // Upload State
     const [dragOver, setDragOver] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
 
+    // MediaRecorder State
+    const [isRecording, setIsRecording] = useState(false);
+    const [recordingTime, setRecordingTime] = useState(0);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const timerRef = useRef<number | null>(null);
+
     useEffect(() => {
         setCases(analysisService.getCases());
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            stopMicrophoneStream();
+        };
     }, []);
+
+    const stopMicrophoneStream = () => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+    };
 
     const handleSelectCase = (caseId: string, runSimulation: boolean = false) => {
         if (runSimulation) {
-            // Set status back to RECEIVED to trigger processing animation
-            analysisService.updateCaseStatus(caseId, 'RECEIVED', { svi: 0, confidence: 0 });
             navigate(`/analysis/${caseId}?analyse=true`);
         } else {
             navigate(`/analysis/${caseId}`);
         }
     };
 
+    // ----- Drag & Drop Logic -----
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
         setDragOver(true);
@@ -37,7 +56,6 @@ const VoiceAnalysis: React.FC = () => {
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setDragOver(false);
-
         const files = e.dataTransfer.files;
         if (files.length > 0) {
             simulateUpload(files[0].name);
@@ -54,75 +72,175 @@ const VoiceAnalysis: React.FC = () => {
     const simulateUpload = (filename: string) => {
         setUploading(true);
         setUploadSuccess(null);
-
-        // Simulate audio parsing upload latencies
         setTimeout(() => {
-            // Create new case as RECEIVED in the database
-            const newCase = analysisService.createCaseFromAudio(filename, 272, 'Hindi');
             setUploading(false);
-            setUploadSuccess(`"${filename}" successfully uploaded as Case ${newCase.id}`);
-
-            // Update local case state
-            setCases(analysisService.getCases());
-
-            // Stagger navigate to start processing
+            setUploadSuccess(`"${filename}" secured for analysis`);
             setTimeout(() => {
-                navigate(`/analysis/${newCase.id}?analyse=true`);
+                navigate(`/analysis/NHAA-9C34F4?analyse=true`); // Default pointing to existing mock case for demo
             }, 1000);
         }, 1500);
     };
 
+    // ----- Media Recorder Logic -----
+    const toggleRecording = async () => {
+        if (isRecording) {
+            stopRecording();
+        } else {
+            await startRecording();
+        }
+    };
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            streamRef.current = stream;
+            const recorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = recorder;
+
+            recorder.ondataavailable = () => {
+                // In a real app, append chunks to send to backend
+            };
+
+            recorder.onstop = () => {
+                stopMicrophoneStream();
+                // Simulate saving recording and redirecting
+                simulateUpload("live_mic_capture.wav");
+            };
+
+            recorder.start();
+            setIsRecording(true);
+            setRecordingTime(0);
+
+            timerRef.current = window.setInterval(() => {
+                setRecordingTime(prev => {
+                    if (prev >= 44) {
+                        stopRecording(); // auto stop at 45s per spec
+                        return 45;
+                    }
+                    return prev + 1;
+                });
+            }, 1000);
+
+        } catch (err) {
+            console.error("Microphone access denied or unavailable", err);
+            alert("Microphone permission is required to perform live triage capture.");
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+            mediaRecorderRef.current.stop();
+        }
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
+        setIsRecording(false);
+    };
+
+    const formatTime = (sec: number) => {
+        const m = Math.floor(sec / 60).toString().padStart(2, '0');
+        const s = (sec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
     return (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-8 animate-fade-in text-[var(--color-text-main)] font-sans">
 
             {/* Page Header */}
-            <div className="border-b border-slate-100 pb-6">
-                <h2 className="font-display font-bold text-3xl text-slate-800 tracking-tight">
-                    Voice Analysis Portal
+            <div className="border-b border-zinc-200 pb-6">
+                <h2 className="font-display font-medium text-3xl tracking-tight">
+                    Voice Analysis Terminal
                 </h2>
-                <p className="text-slate-500 text-sm mt-1.5 font-light">
-                    Analyse recorded interactions, speech pacing details and pitch variations for trauma indicators.
+                <p className="text-[var(--color-text-muted)] text-sm mt-1.5 font-light">
+                    Initiate new multimodality intake via live mic capture or file ingest.
                 </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {/* LEFT COLUMN: Upload Panel */}
+                {/* LEFT COLUMN: Input Panels */}
                 <div className="lg:col-span-2 space-y-6">
 
-                    {/* Upload Box */}
-                    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm shadow-slate-100/30">
-                        <h3 className="font-display font-bold text-base text-slate-800 mb-4">
-                            Ingest Audio Call Recording
+                    {/* Microphone Capture Box */}
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm overflow-hidden relative">
+                        <h3 className="font-display font-medium text-lg mb-4">
+                            Live Microphone Triage
+                        </h3>
+
+                        {isRecording ? (
+                            <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-100 rounded-xl">
+                                <div className="text-red-500 mb-4 animate-pulse">
+                                    <Mic size={48} />
+                                </div>
+                                <div className="text-xl font-mono font-bold text-red-600 mb-6">
+                                    REC [ {formatTime(recordingTime)} / 00:45 ]
+                                </div>
+
+                                {/* CSS Wave Visualizer Mock */}
+                                <div className="flex items-center gap-1 h-12 mb-8">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => (
+                                        <div
+                                            key={i}
+                                            className="w-2 bg-red-400 rounded-full animate-pulse"
+                                            style={{ height: `${Math.max(10, Math.random() * 100)}%`, animationDelay: `${i * 0.1}s` }}
+                                        />
+                                    ))}
+                                </div>
+
+                                <button
+                                    onClick={stopRecording}
+                                    className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-full flex items-center gap-2 shadow-lg shadow-red-500/20"
+                                >
+                                    <Square size={16} className="fill-current" />
+                                    <span>Terminate & Process</span>
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center p-8 bg-zinc-50 border border-zinc-100 rounded-xl hover:bg-zinc-100 transition-colors">
+                                <button
+                                    onClick={toggleRecording}
+                                    className="w-20 h-20 bg-[var(--color-text-main)] hover:bg-black text-white rounded-full flex items-center justify-center shadow-xl shadow-black/10 transition-all hover:scale-105 mb-4"
+                                >
+                                    <Mic size={32} />
+                                </button>
+                                <p className="font-semibold text-sm">Initialize Microphone Pipeline</p>
+                                <p className="text-xs text-zinc-500 mt-1">Requires browser hardware consent.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* File Upload Box */}
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm">
+                        <h3 className="font-display font-medium text-lg mb-4">
+                            Batch File Ingest
                         </h3>
 
                         {uploading ? (
-                            <div className="border-2 border-dashed border-teal-200 bg-teal-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-4">
-                                <span className="w-10 h-10 border-4 border-slate-100 border-t-teal-600 rounded-full animate-spin"></span>
+                            <div className="border-2 border-dashed border-lime-200 bg-lime-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-4">
+                                <span className="w-10 h-10 border-4 border-zinc-100 border-t-[var(--color-severe-low)] rounded-full animate-spin"></span>
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-700">Connecting Audio Pipeline...</p>
-                                    <p className="text-xs text-slate-400 mt-1 font-light">Validating waveforms and noise floors</p>
+                                    <p className="text-sm font-semibold text-zinc-700">Connecting Audio Pipeline...</p>
                                 </div>
                             </div>
                         ) : uploadSuccess ? (
-                            <div className="border-2 border-dashed border-emerald-200 bg-emerald-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                            <div className="border-2 border-dashed border-green-200 bg-green-50/10 rounded-xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
                                     <ShieldCheck size={20} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-800">Upload Secured</p>
-                                    <p className="text-xs text-emerald-700 mt-1 font-mono">{uploadSuccess}</p>
+                                    <p className="text-sm font-semibold text-[var(--color-text-main)]">Ingest Sequence Sent</p>
+                                    <p className="text-xs text-green-700 mt-1 font-mono">{uploadSuccess}</p>
                                 </div>
-                                <p className="text-[10px] text-slate-400 mt-2">Redirecting to Live Triage Dashboard...</p>
                             </div>
                         ) : (
                             <label
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
-                                className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
-                                    ? 'border-teal-500 bg-teal-50/30 scale-[0.99]'
-                                    : 'border-slate-200 hover:border-slate-300 bg-slate-50/50 hover:bg-slate-50'
+                                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group relative ${dragOver
+                                    ? 'border-blue-500 bg-blue-50/30'
+                                    : 'border-zinc-300 hover:border-zinc-400 bg-zinc-50'
                                     }`}
                             >
                                 <input
@@ -131,97 +249,74 @@ const VoiceAnalysis: React.FC = () => {
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                     onChange={handleFileChange}
                                 />
-                                <div className="w-12 h-12 rounded-full bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-teal-600 group-hover:scale-105 transition-all shadow-sm">
+                                <div className="w-12 h-12 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 group-hover:text-blue-600 group-hover:scale-105 transition-all shadow-sm">
                                     <Upload size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-700">
-                                        Drag and drop digital helpline audio recordings here
+                                    <p className="text-sm font-semibold text-zinc-700">
+                                        Drag and drop historical audio encodings here
                                     </p>
-                                    <p className="text-xs text-slate-400 mt-1 font-light">
-                                        Supports MP3, WAV, M4A call recordings up to 50MB
+                                    <p className="text-xs text-zinc-400 mt-1 font-light">
+                                        Supports encrypted WAV/M4A payload bundles
                                     </p>
                                 </div>
-                                <button
-                                    type="button"
-                                    className="mt-2 text-xs font-semibold px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 shadow-xs hover:border-slate-300 transition-colors"
-                                >
-                                    Browse Files
-                                </button>
                             </label>
                         )}
 
-                        {/* Disclaimer info */}
-                        <div className="mt-4 flex items-start gap-2.5 bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs text-slate-400 leading-normal font-light">
-                            <AlertTriangle size={15} className="text-slate-400 shrink-0 mt-0.5" />
+                        <div className="mt-4 flex items-start gap-2.5 bg-zinc-50 border border-zinc-200 rounded-xl p-3 text-xs text-zinc-500 leading-normal font-light">
+                            <AlertTriangle size={15} className="text-zinc-400 shrink-0 mt-0.5" />
                             <p>
-                                Ensure compliance: Only voice data collected under helpline consent waivers may be parsed. Raw voice files are processed locally and are deleted immediately upon browser session closing.
+                                NHAA Standard: Audio data is processed in-memory. Residual buffer artifacts are immediately scrubbed upon completion of diagnostic mapping.
                             </p>
                         </div>
                     </div>
-
                 </div>
 
-                {/* RIGHT COLUMN: Preset Case Samples */}
+                {/* RIGHT COLUMN: Recent Presets */}
                 <div className="space-y-6">
-                    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm shadow-slate-100/30">
-                        <h3 className="font-display font-bold text-base text-slate-800 mb-1">
-                            Select Preset Sample Call
+                    <div className="bg-[var(--color-surface-card)] border border-[var(--color-surface-border)] rounded-2xl p-6 shadow-sm">
+                        <h3 className="font-display font-medium text-lg mb-1">
+                            Load NHAA Architecture Demo
                         </h3>
-                        <p className="text-xs text-slate-400 font-light mb-6">
-                            Load realistic interactions to demo analysis indicators.
+                        <p className="text-xs text-[var(--color-text-muted)] font-light mb-6">
+                            Bypass ingestion for validated test arrays
                         </p>
 
                         <div className="space-y-4">
-                            {cases.slice(0, 3).map((item) => (
+                            {cases.slice(0, 2).map((item) => (
                                 <div
-                                    key={item.id}
-                                    className="border border-slate-100 rounded-xl p-4 hover:border-teal-100 hover:bg-teal-50/10 transition-all group flex flex-col justify-between h-42"
+                                    key={item.case_id}
+                                    className="border border-zinc-200 rounded-xl p-4 hover:border-zinc-300 hover:bg-zinc-50 transition-all group flex flex-col justify-between"
                                 >
                                     <div>
-                                        {/* ID & Language */}
                                         <div className="flex items-center justify-between">
-                                            <span className="font-display font-semibold text-slate-800 text-sm group-hover:text-teal-700 transition-colors">
-                                                {item.id}
+                                            <span className="font-display font-semibold text-[var(--color-text-main)] text-sm group-hover:text-blue-700 transition-colors">
+                                                {item.case_id}
                                             </span>
-                                            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
-                                                {item.language}
+                                            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-zinc-200 text-zinc-600 font-bold">
+                                                {item.svi.risk_category}
                                             </span>
                                         </div>
 
-                                        {/* Meta stats */}
-                                        <div className="flex gap-4 mt-3 text-xs text-slate-400 font-light">
-                                            <span className="flex items-center gap-1">
-                                                <Clock size={12} />
-                                                {item.duration}
-                                            </span>
+                                        <div className="flex gap-4 mt-3 text-xs text-zinc-500 font-light font-mono">
                                             <span className="flex items-center gap-1">
                                                 <Languages size={12} />
-                                                {item.language === 'Tamil' ? 'Tamil Dialect' : item.language === 'English' ? 'Standard English' : 'Hindi Dialect'}
+                                                {item.transcription.language}
                                             </span>
                                         </div>
 
-                                        {/* Custom summary preview */}
-                                        <p className="text-xs text-slate-500 mt-3.5 italic line-clamp-1 border-l-2 border-slate-100 pl-2">
-                                            "{item.transcript[0]?.text}"
+                                        <p className="text-xs text-zinc-600 mt-3 italic line-clamp-1 border-l-2 border-zinc-300 pl-2">
+                                            "{item.transcription.text}"
                                         </p>
                                     </div>
 
-                                    {/* Trigger buttons */}
-                                    <div className="flex items-center justify-end gap-2 border-t border-slate-100/60 pt-3 mt-3">
+                                    <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3 mt-3">
                                         <button
-                                            onClick={() => handleSelectCase(item.id, true)}
-                                            className="text-[11px] font-semibold text-teal-600 hover:text-teal-700 bg-teal-50 hover:bg-teal-100/60 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                                            onClick={() => handleSelectCase(item.case_id, true)}
+                                            className="text-[11px] font-semibold text-[var(--color-text-main)] hover:text-white bg-zinc-100 hover:bg-zinc-800 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
                                         >
                                             <Play size={11} className="stroke-[2.5]" />
-                                            <span>Analyse Live</span>
-                                        </button>
-                                        <button
-                                            onClick={() => handleSelectCase(item.id, false)}
-                                            className="text-[11px] font-semibold text-slate-500 hover:text-slate-800 px-2 py-1.5 rounded h-8 transition-colors flex items-center"
-                                        >
-                                            <span>Skip to Results</span>
-                                            <ChevronRight size={12} />
+                                            <span>Inject Payload</span>
                                         </button>
                                     </div>
                                 </div>
@@ -231,7 +326,6 @@ const VoiceAnalysis: React.FC = () => {
                 </div>
 
             </div>
-
         </div>
     );
 };
